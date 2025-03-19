@@ -1,0 +1,7 @@
+/.venv
+/lightning_logs
+/lstmByHand.py
+/lstm_torchlightning.py
+/nn.py
+/nn_torchlightning.py
+/notebook
