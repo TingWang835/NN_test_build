@@ -40,7 +40,6 @@ df["cut"] = df["cut"].map(v2c_cut)  # map/replace verbal with int
 df["color"] = df["color"].map(v2c_color)
 df["clarity"] = df["clarity"].map(v2c_clarity)
 print(df.head())
-
 X = df.drop(["price"], axis=1)  # axis=1 =remove column, axis=0 = remove 1st row/index
 y = df["price"]
 # assigning inputs and labels and convert to tensor
@@ -61,8 +60,8 @@ test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 
 
 # region model
-class L_identification(L.LightningModule):
-    def __init__(self, in_feature=4, h1=8, h2=9, out_feature=3):
+class L_prediction(L.LightningModule):
+    def __init__(self, in_feature=9, h1=18, h2=19, out_feature=1):
         super().__init__()
         self.fc1 = nn.Linear(in_feature, h1)
         self.fc2 = nn.Linear(h1, h2)
@@ -79,16 +78,14 @@ class L_identification(L.LightningModule):
         return Adam(self.parameters(), lr=self.learning_rate)
 
     def calculate_accuracy(self, output, label):
-        prediction = torch.argmax(output, dim=1, keepdim=False)
         total = label.size(0)
-        correct = (prediction == label).sum().item()
+        correct = (output == label).sum().item()
         return correct / total
 
     def training_step(self, batch, batch_idx):
         input_i, label_i = batch
         output_i = self.forward(input_i)
-        criterion = nn.CrossEntropyLoss()  ##important: do not combine these two lines
-        loss = criterion(output_i, label_i)  ##important: do not combine these two lines
+        loss = (output_i - label_i) ** 2
         self.log("train_loss", loss)  # logging loss
         accuracy = self.calculate_accuracy(output_i, label_i)
         self.log("train_accuracy", accuracy)  # logging accuracy
@@ -97,8 +94,7 @@ class L_identification(L.LightningModule):
     def test_step(self, batch, batch_idx):
         input_i, label_i = batch
         output_i = self.forward(input_i)
-        criterion = nn.CrossEntropyLoss()
-        loss = criterion(output_i, label_i)
+        loss = (output_i - label_i) ** 2
         return loss
 
 
@@ -107,7 +103,7 @@ class L_identification(L.LightningModule):
 # region train model
 # train_dataloader
 torch.manual_seed = 81
-model = L_identification()
+model = L_prediction()
 epochs = 300
 trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=10)
 # learning rate finder
@@ -155,7 +151,7 @@ torch.save(model.state_dict(), "model\l_id_iris.pt")
 
 # region Identify by model
 # load model and parameters
-loaded_model = L_identification()
+loaded_model = L_prediction()
 loaded_model.load_state_dict(torch.load("model\l_id_iris.pt"))
 
 # identify
