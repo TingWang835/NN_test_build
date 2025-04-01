@@ -53,7 +53,7 @@ train_input, test_input, train_label, test_label = train_test_split(
 train_dataset = TensorDataset(train_input, train_label)
 test_dataset = TensorDataset(test_input, test_label)
 # dataloader
-batch_size = 50  # train faster
+batch_size = 64  # train faster
 train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
 test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # endregion
@@ -85,16 +85,14 @@ class L_prediction(L.LightningModule):
     def training_step(self, batch, batch_idx):
         input_i, label_i = batch
         output_i = self.forward(input_i)
-        loss = (output_i - label_i) ** 2
+        loss = F.mse_loss(output_i, label_i)  # must use loss functions
         self.log("train_loss", loss)  # logging loss
-        accuracy = self.calculate_accuracy(output_i, label_i)
-        self.log("train_accuracy", accuracy)  # logging accuracy
         return loss
 
     def test_step(self, batch, batch_idx):
         input_i, label_i = batch
         output_i = self.forward(input_i)
-        loss = (output_i - label_i) ** 2
+        loss = F.mse_loss(output_i, label_i)
         return loss
 
 
