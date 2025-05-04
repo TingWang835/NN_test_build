@@ -115,6 +115,10 @@ trainer.fit(model, train_dataloaders=train_loader, ckpt_path=path_to_best_checkp
 # evaluating train/loss result
 # tensorboard --logdir=lightning_logs/
 
+# or the following for notebook
+# %reload_ext tensorboard
+# %tensorboard --logdir=lightning_logs/
+
 # endregion
 
 # region testing
@@ -139,8 +143,8 @@ plt.scatter(
     c="#1f78b4",  # marker color hex code (blue)
     edgecolors="black",  # axis color
     linewidths=1,  # axis width
-    alpha=0.80,
-)  # axis alpha
+    alpha=0.80,  # axis alpha
+)
 plt.title("Label vs Prediction-train")
 plt.xlabel("Label Value (Normalized)")
 plt.ylabel("Prediction Value (Normalized)")
@@ -156,8 +160,8 @@ plt.scatter(
     c="#fb9a99",  # marker color hex code (grapefruit)
     edgecolors="black",  # axis color
     linewidths=1,  # axis width
-    alpha=0.80,
-)  # axis alpha
+    alpha=0.80,  # axis alpha
+)
 plt.title("Label vs Prediction-test")
 plt.xlabel("Label Value (Normalized)")
 plt.ylabel("Prediction Value (Normalized)")
@@ -166,7 +170,6 @@ plt.annotate("r-squared = {:.3f}".format(r2_score(test_label, test_res)), (0.01,
 
 plt.tight_layout()
 plt.show()
-
 
 # saving model and parameters
 torch.save(model.state_dict(), "model\l_pd_BostonHousing.pt")
