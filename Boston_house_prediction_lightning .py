@@ -70,7 +70,7 @@ class L_prediction(L.LightningModule):
         criterion = nn.MSELoss()  ##separate lines to be more adaptive
         loss = criterion(output_i, label_i)
         self.log("train_loss", loss)  # logging loss
-        rsquare = r2_score(output_i, label_i)
+        rsquare = r2_score(label_i, output_i)
         self.log("train_r^2", rsquare)  # logging R square score
         return loss
 
@@ -136,7 +136,7 @@ plt.scatter(
     train_res,
     marker="x",  # marker shape
     s=100,  # marker size
-    c="blue",  # marker color
+    c="#1f78b4",  # marker color hex code (blue)
     edgecolors="black",  # axis color
     linewidths=1,  # axis width
     alpha=0.80,
@@ -153,7 +153,7 @@ plt.scatter(
     test_res,
     marker="o",  # marker shape
     s=100,  # marker size
-    c="red",  # marker color
+    c="#fb9a99",  # marker color hex code (grapefruit)
     edgecolors="black",  # axis color
     linewidths=1,  # axis width
     alpha=0.80,
