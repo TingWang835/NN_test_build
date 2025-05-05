@@ -173,11 +173,29 @@ plt.show()
 
 # saving model and parameters
 torch.save(model.state_dict(), "model\l_pd_BostonHousing.pt")
-
 # endregion
 
 
-# Identify by model
+# region Actual Prediction
 # load model and parameters
 loaded_model = L_prediction()
 loaded_model.load_state_dict(torch.load("model\l_pd_BostonHousing.pt"))
+
+# load CSV dataset
+directory = "data\Boston\BostonHousing_100.csv"  # can use url
+df_real = pd.read_csv(directory, delimiter=",")
+
+# Normalize with training scaler
+df_real.iloc[:, np.r_[1:3, 5:13]] = scaler.transform(df_real.iloc[:, np.r_[1:3, 5:13]])
+print(df_real.head())
+real_input = torch.FloatTensor(df_real.values)  # convert to tensor
+
+pred_res = model.forward(real_input).clone().detach()
+pred_medv = pd.DataFrame(pred_res.numpy())  # convert tensor to df
+df_real.insert(loc=14, column="pred_medv", value=pred_medv, allow_duplicates=False)
+df_real.iloc[:, np.r_[1:3, 5:14]] = scaler.inverse_transform(
+    df_real.iloc[:, np.r_[1:3, 5:14]]
+)
+print(df_real.head())
+df_real.to_csv("Price_prediction.csv", index=False)
+# endregion
