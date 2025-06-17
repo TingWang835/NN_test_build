@@ -2,10 +2,10 @@ Purpose of the repository:
 This repository is an exhibition of the machine learning models I have programed using popular datasets. Despite being a junior level self taught programmer, the models shown here did have readability, maintainability and scalability in mind when programmed, so that incase of need they can be quickly fitted on other datasets; or used by others thereof. Still I am aware that my programming skills are far from perfect, so please feel free to give me pointers :)
 
 Structure:
-data : raw data files (.csv) are stored. \n
-model: trained parameters of various models are stored. \n
-python: .py files are stored, each has matching name with their jupyter notebook version. \n
-MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf). \n
+data : raw data files (.csv) are stored. <\b>
+model: trained parameters of various models are stored. <\b>
+python: .py files are stored, each has matching name with their jupyter notebook version. <\b>
+MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf). <\b>
 
 Current trained models includes:
 
