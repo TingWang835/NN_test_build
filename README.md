@@ -12,5 +12,4 @@ Current trained models includes:
     2. Boston_house_prediction_lightning .py: Pytorch lighting nn for prediction (using boston house dataset (1978))
 
 
-Failed model
-Prediction model for Diamonds dataset, failed possiblly bc there are 3 categorical columns which did not provide sufficient learning material to predict a price variation between $326~18823, despite the sheer size of the dataset.
+
