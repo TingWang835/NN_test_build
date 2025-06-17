@@ -9,6 +9,7 @@ python: .py files are stored, each has matching name with their jupyter notebook
 Current trained models includes:
 
     1. Iris_identification_lightning.ipynb: Pytorch lightning nn for identification (using iris dataset (1988))
+    2. Boston_house_prediction_lightning .py: Pytorch lighting nn for prediction (using boston house dataset (1978))
 
 
 Failed model
