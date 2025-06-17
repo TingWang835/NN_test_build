@@ -182,7 +182,7 @@ loaded_model = L_prediction()
 loaded_model.load_state_dict(torch.load("model\l_pd_BostonHousing.pt"))
 
 # load CSV dataset
-directory = "data\Boston\BostonHousing_100.csv"  # can use url
+directory = "data\Boston\BostonHousing_100.csv"  # randomly selected 100 data to resemble real data
 df_real = pd.read_csv(directory, delimiter=",")
 
 # Normalize with training scaler
@@ -197,5 +197,5 @@ df_real.iloc[:, np.r_[1:3, 5:14]] = scaler.inverse_transform(
     df_real.iloc[:, np.r_[1:3, 5:14]]
 )
 print(df_real.head())
-df_real.to_csv("Price_prediction.csv", index=False)
+df_real.to_csv("Price_prediction.csv", index=False)  # save prediction as new csv
 # endregion
