@@ -1,0 +1,12 @@
+DrugID,Launch_date,chemical_name,brand_name,dosage form,dosage,indication,Project_manager
+1,1997-01-02,Acetaminophen,Actamin,oral capsule,500mg,Pain reliever,1001
+2,2013-03-16,Benzonatate,Tessalon,oral capsule,100mg,Cough reliver,1001
+3,2002-12-30,Adalimumab,Humira,subcutaneous injection (Pen),80mg/0.8ml,Antirheumatic,1003
+4,2017-12-05,Semaglutide,Ozempic,subcutaneous injection (Pen),0.25mg/0.5ml,type II diabete,1002
+5,2006-05-01,Naltrexone,Vivitrol,intramuscular injection ,380mg,alcohol/opioid use disorder ,1001
+6,1992-07-09,Metoprolol Succinate,Kapspargo Sprinkle ,extended-release capsule,50mg,hypertension,1002
+7,2004-04-27,Metformin,Fortamet,tablet,500mg,type II diabete,1005
+8,2023-02-01,Atorvastatin,Atorvaliq,Oral suspension,20mg/5ml,Heart disease,1004
+9,1958-10-30,dexamethasone ,Hemady,tablet,20mg,Anti-inflammatory,1001
+10,1997-03-17,Mirtazapine,Remeron,tablet,20mg,Anti-depressant,1001
+11,2013-01-01,a,b,tablet,20mg,ab,1000
