@@ -3,7 +3,8 @@ This repository is an exhibition of the machine learning models I have programed
 
 Structure:
 data : raw data files (.csv) are stored. <br/>
-model: trained parameters of various models are stored. <br/>
+model: codes of NN models. <br/>
+trained_parameter: trained parameters of various models. <br/>
 python: .py files are stored, each has matching name with their jupyter notebook version. <br/>
 MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf). <br/>
 
