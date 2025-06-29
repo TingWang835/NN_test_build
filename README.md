@@ -10,7 +10,7 @@ MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf
 Current trained models includes:
 
     1. Iris_identification_lightning.ipynb: Pytorch lightning nn for identification (using iris dataset (1988))
-    2. Boston_house_prediction_lightning .py: Pytorch lighting nn for prediction (using boston house dataset (1978))
+    2. Boston_house_prediction_lightning.py: Pytorch lighting nn for prediction (using boston house dataset (1978))
 
 
 
