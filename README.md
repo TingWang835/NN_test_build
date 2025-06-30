@@ -5,7 +5,7 @@ Structure:
 data : raw data files (.csv) are stored. <br/>
 model: codes of NN models. <br/>
 trained_parameter: trained parameters of various models. <br/>
-python: .py files are stored, each has matching name with their jupyter notebook version. <br/>
+pyfile: .py files are stored, each has matching name with their jupyter notebook version. <br/>
 MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf). <br/>
 
 Current trained models includes:
