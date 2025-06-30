@@ -5,3 +5,5 @@
 /nn.py
 /nn_torchlightning.py
 /notebook
+/model/__pycache__
+data/MNIST_CSV/generate_mnist_csv.py
