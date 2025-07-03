@@ -10,25 +10,25 @@ class L_VAE_1(L.LightningModule):
     def __init__(self, input_dim, hidden_dim, latent_dim):
         super().__init__()
         # encoder
-        self.in_2_hid = nn.Linear(input_dim, hidden_dim)
-        self.hid_2_mu = nn.Linear(hidden_dim, latent_dim)
-        self.hid_2_sigma = nn.Linear(hidden_dim, latent_dim)
+        self.fc1 = nn.Linear(input_dim, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, latent_dim)
+        self.fc3 = nn.Linear(hidden_dim, latent_dim)
 
         # decoder
-        self.z_2_hid = nn.Linear(latent_dim, hidden_dim)
-        self.hid_2_out = nn.Linear(hidden_dim, input_dim)
+        self.fc4 = nn.Linear(latent_dim, hidden_dim)
+        self.fc5 = nn.Linear(hidden_dim, input_dim)
 
         # lr
         self.learning_rate = 0.001
 
     def encoder(self, x):
-        hid = F.relu(self.in_2_hid(x))
-        mu, sigma = self.hid_2_mu(hid), self.hid_2_sigma(hid)
+        hid = F.relu(self.fc1(x))
+        mu, sigma = self.fc2(hid), self.fc3(hid)
         return mu, sigma
 
     def decoder(self, z):
-        hid = F.relu(self.z_2_hid(z))
-        output = torch.sigmoid(self.hid_2_out(hid))
+        hid = F.relu(self.fc4(z))
+        output = torch.sigmoid(self.fc5(hid))
         # sigmoid to create binary data
         return output
 
@@ -46,7 +46,8 @@ class L_VAE_1(L.LightningModule):
     def training_step(self, batch, batch_idx):
         input_i, _ = batch
         reconstruct, mu, sigma = self.forward(input_i)
-        recon_loss = nn.BCELoss(reconstruct, input_i)
+        criterion = nn.BCELoss(reduction="sum")
+        recon_loss = criterion(reconstruct, input_i)
         # BCELoss for binary data like in MNIST
         kl_divergence = torch.sum(
             -0.5 * (1 + torch.log(sigma.pow(2)) - mu.pow(2) - sigma.pow(2))
