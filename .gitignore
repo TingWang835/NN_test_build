@@ -14,3 +14,5 @@ data/airpollution/AirPollution.csv
 data/MNIST/mnist_train.csv
 .gitignore
 data/MNIST/mnist_test.csv
+data/MNIST/mnist_binary_train.csv
+data/MNIST/mnist_binary_test.csv
