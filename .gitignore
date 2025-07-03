@@ -11,3 +11,6 @@ data/MNIST/generate_mnist_csv.py
 Airpollution_mutivariant_LSTM_lightning.py
 data/airpollution/airpollution_note.odt
 data/airpollution/AirPollution.csv
+data/MNIST/mnist_train.csv
+.gitignore
+data/MNIST/mnist_test.csv
