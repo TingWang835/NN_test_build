@@ -12,6 +12,7 @@ Current trained models includes:
 
     1. Iris_identification_lightning.ipynb: Pytorch lightning nn for identification (using iris dataset (1988))
     2. Boston_house_prediction_lightning.py: Pytorch lighting nn for prediction (using boston house dataset (1978))
+    3. MNIST_VAE_lightning.py: Variational Autoencoder for MNIST binary dataset (1992), model: VAE.py, Class: L_VAE_BCE
 
 
 
