@@ -19,7 +19,7 @@ class L_VAE_1(L.LightningModule):
         self.fc5 = nn.Linear(hidden_dim, input_dim)
 
         # lr
-        self.learning_rate = 0.001
+        self.learning_rate = 0.01
 
     def encoder(self, x):
         hid = F.relu(self.fc1(x))
@@ -49,9 +49,7 @@ class L_VAE_1(L.LightningModule):
         criterion = nn.BCELoss(reduction="sum")
         recon_loss = criterion(reconstruct, input_i)
         # BCELoss for binary data like in MNIST
-        kl_divergence = torch.sum(
-            -0.5 * (1 + torch.log(sigma.pow(2)) - mu.pow(2) - sigma.pow(2))
-        )
+        kl_divergence = -0.5 * torch.sum(1 + sigma - mu.pow(2) - sigma.exp())
         loss = recon_loss + kl_divergence
         self.log("train_loss", loss)
         return loss
