@@ -6,7 +6,7 @@ from torch.optim import Adam
 
 
 # region Class: L_VAE_1, Module: lightning, opt:adam, loss Function:BCEloss
-class L_VAE_1(L.LightningModule):
+class L_VAE_BCE(L.LightningModule):
     def __init__(self, input_dim, hidden_dim, latent_dim):
         super().__init__()
         # encoder
@@ -57,7 +57,7 @@ class L_VAE_1(L.LightningModule):
 
 if __name__ == "__main__":
     x = torch.randn(4, 28 * 28)
-    vae = L_VAE_1(input_dim=784, hidden_dim=200, latent_dim=20)
+    vae = L_VAE_BCE(input_dim=784, hidden_dim=200, latent_dim=20)
     reconstruct, mu, sigma = vae(x)
     print(reconstruct.shape)
     print(mu.shape)
