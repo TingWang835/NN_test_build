@@ -1,11 +1,13 @@
+# Packages
 import torch
 import lightning as L
 from torch.utils.data import TensorDataset, DataLoader
 from matplotlib import pyplot as plt
-from model.VAE import L_VAE_1 as vae
-import pandas as pd
 from sklearn.manifold import TSNE
+import pandas as pd
 
+# Mymodel
+from model.VAE import L_VAE_BCE as vae
 
 # region model setting
 model = vae(input_dim=784, hidden_dim=200, latent_dim=20)
