@@ -5,6 +5,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from matplotlib import pyplot as plt
 from sklearn.manifold import TSNE
 import pandas as pd
+import numpy as np
 
 # Mymodel
 from model.VAE import L_VAE_BCE as vae
@@ -96,16 +97,15 @@ trainer.fit(model, train_dataloaders=train_loader, ckpt_path=path_to_best_checkp
 # %reload_ext tensorboard
 # %tensorboard --logdir=lightning_logs/
 
+torch.save(model.state_dict(), "trained_parameters\L_VAE_MNIST.pt")  # save parameters
 # endregion
 
 # region testing
-with torch.no_grad():
-    best_ckpt = trainer.checkpoint_callback.best_model_path
-    tester = L.Trainer()
-    tester.test(model, dataloaders=test_loader, ckpt_path=best_ckpt)
-
-
 # t-sne of latent space
+loaded_model = vae(input_dim=784, hidden_dim=200, latent_dim=20)
+loaded_model.load_state_dict(torch.load("trained_parameters\L_VAE_MNIST.pt"))
+
+
 def get_latent_space(model, data_loader):
     latent_vectors = []
     with torch.no_grad():
@@ -117,20 +117,54 @@ def get_latent_space(model, data_loader):
     return torch.cat(latent_vectors, dim=0).numpy()
 
 
-latent_vectors = get_latent_space(model, test_loader)
+# running t-SNE
+latent_vectors = get_latent_space(loaded_model, test_loader)
 tsne = TSNE(n_components=2, perplexity=30, learning_rate=200, init="pca")
 tsne_features = tsne.fit_transform(latent_vectors)
 plt.figure(figsize=(10, 6))
-plt.scatter(tsne_features[:, 0], tsne_features[:, 1], c=test_label, cmap="Paired")
+plt.scatter(
+    tsne_features[:, 0],
+    tsne_features[:, 1],
+    s=20,
+    marker=".",
+    c=test_label,
+    cmap="Paired",
+)
 plt.xlabel("t-SNE 1")
 plt.ylabel("t-SNE 2")
 plt.title("2D t-SNE of the latent space")
 plt.colorbar(label="Cluster Labels")
 plt.show()
 
+# endregion
 
-torch.save(model.state_dict(), "trained_parameters\L_VAE_MNIST.pt")
+
+# region sample and generate new from VAE
+def generate_image(model, dataset, label):
+    images = []
+    idx = label
+    for x, y in dataset:
+        if y == idx:
+            images.append(x)
+
+    encodeings_digit = []
+    idx = label
+    for idx in range(10):
+        with torch.no_grad():
+            mu, sigma = model.encoder(images[idx].view(1, 784))
+            encodeings_digit.append((mu, sigma))
+
+    mu, sigma = encodeings_digit[label]
+    epsilon = torch.randn_like(sigma)
+    z = mu + sigma * epsilon
+    out = model.decoder(z)
+    out = torch.where(out > 0.2, 1, 0)  # convert sigmoid output into binary
+    out = out.view(1, 28, 28)  # generate image with 1 channel, 28 * 28 pixels
+    out_np = out.cpu().numpy()
+    out_np = np.transpose(out_np, (1, 2, 0))
+    plt.imshow(out_np, cmap="gray")
+    plt.axis("off")  # Hide axes
+    plt.show()
 
 
-loaded_model = vae(input_dim=784, hidden_dim=200, latent_dim=20)
-loaded_model.load_state_dict(torch.load("trained_parameters\L_VAE_MNIST.pt"))
+generate_image(loaded_model, test_dataset, 0)
