@@ -5,12 +5,11 @@ Structure:
 data : raw data files (.csv) are stored. <br/>
 model: codes of NN models. <br/>
 trained_parameter: trained parameters of various models. <br/>
-pyfile: .py files are stored, each has matching name with their jupyter notebook version. <br/>
 MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf). <br/>
 
 Current trained models includes:
 
-    1. Iris_identification_lightning.ipynb: Pytorch lightning nn for identification (using iris dataset (1988))
+    1. Iris_identification_lightning.py: Pytorch lightning nn for identification (using iris dataset (1988))
     2. Boston_house_prediction_lightning.py: Pytorch lighting nn for prediction (using boston house dataset (1978))
     3. MNIST_VAE_lightning.py: Variational Autoencoder for MNIST binary dataset (1992), model: VAE.py, Class: L_VAE_BCE
 
