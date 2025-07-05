@@ -1,8 +1,5 @@
 import torch
-import torch.nn as nn
 import lightning as L
-import torch.nn.functional as F
-from torch.optim import Adam
 from torch.utils.data import TensorDataset, DataLoader
 from torchmetrics.functional import r2_score
 from sklearn.model_selection import train_test_split
@@ -10,6 +7,16 @@ from sklearn.preprocessing import MinMaxScaler
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
+
+# my model
+from model.basicNN import L_NN_Pred as pred
+
+# region model setting
+model = pred(in_feature=13, h1=26, h2=27, h3=28, out_feature=1)
+torch.manual_seed = 81
+epochs = 500
+log_every_n_step = 10
+# endregion
 
 # region dataset
 # import and modify data with pandas
@@ -44,52 +51,9 @@ test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # endregion
 
 
-# region model
-class L_prediction(L.LightningModule):
-    def __init__(self, in_feature=13, h1=26, h2=27, h3=28, out_feature=1):
-        super().__init__()
-        self.fc1 = nn.Linear(in_feature, h1, bias=True)
-        self.fc2 = nn.Linear(h1, h2, bias=True)
-        self.fc3 = nn.Linear(h2, h3, bias=True)
-        self.out = nn.Linear(h3, out_feature, bias=True)
-        self.learning_rate = 0.001
-
-    def forward(self, input):
-        x = F.relu(self.fc1(input))
-        x = F.relu(self.fc2(x))
-        x = F.relu(self.fc3(x))
-        x = self.out(x)
-        return x
-
-    def configure_optimizers(self):
-        return Adam(self.parameters(), lr=self.learning_rate)
-
-    def training_step(self, batch, batch_idx):
-        input_i, label_i = batch
-        output_i = self.forward(input_i)
-        criterion = nn.MSELoss()  ##separate lines to be more adaptive
-        loss = criterion(output_i, label_i)
-        self.log("train_loss", loss)  # logging loss
-        rsquare = r2_score(label_i, output_i)
-        self.log("train_r^2", rsquare)  # logging R square score
-        return loss
-
-    def test_step(self, batch, batch_idx):
-        input_i, label_i = batch
-        output_i = self.forward(input_i)
-        criterion = nn.MSELoss()  ##separate lines to be more adaptive
-        loss = criterion(output_i, label_i)
-        return loss
-
-
-# endregion
-
 # region train model
 # train_dataloader
-torch.manual_seed = 81
-model = L_prediction()
-epochs = 500
-trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=10)
+trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=log_every_n_step)
 
 # learning rate finder
 tuner = L.pytorch.tuner.Tuner(trainer)
@@ -178,7 +142,7 @@ torch.save(model.state_dict(), "model\l_pd_BostonHousing.pt")
 
 # region Actual Prediction
 # load model and parameters
-loaded_model = L_prediction()
+loaded_model = pred(in_feature=13, h1=26, h2=27, h3=28, out_feature=1)
 loaded_model.load_state_dict(torch.load("model\l_pd_BostonHousing.pt"))
 
 # load CSV dataset

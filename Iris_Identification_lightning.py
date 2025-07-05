@@ -1,11 +1,19 @@
 import torch
-import torch.nn as nn
 import lightning as L
-import torch.nn.functional as F
-from torch.optim import Adam
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
 import pandas as pd
+
+
+# my model
+from model.basicNN import L_NN_ID as iden
+
+# region model setting
+model = iden(in_feature=4, h1=8, h2=9, out_feature=3)
+torch.manual_seed = 81
+epochs = 500
+log_every_n_step = 10
+# endregion
 
 # region dataset
 # import and modify data with pandas
@@ -38,53 +46,8 @@ test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # endregion
 
 
-# region model
-class L_identification(L.LightningModule):
-    def __init__(self, in_feature=4, h1=8, h2=9, out_feature=3):
-        super().__init__()
-        self.fc1 = nn.Linear(in_feature, h1)
-        self.fc2 = nn.Linear(h1, h2)
-        self.out = nn.Linear(h2, out_feature)
-        self.learning_rate = 0.01
-
-    def forward(self, input):
-        x = F.relu(self.fc1(input))
-        x = F.relu(self.fc2(x))
-        x = self.out(x)
-        return x
-
-    def configure_optimizers(self):
-        return Adam(self.parameters(), lr=self.learning_rate)
-
-    def calculate_accuracy(self, output, label):
-        prediction = torch.argmax(output, dim=1, keepdim=False)
-        total = label.size(0)
-        check = (prediction == label).sum().item()
-        return check / total
-
-    def training_step(self, batch, batch_idx):
-        input_i, label_i = batch
-        output_i = self.forward(input_i)
-        criterion = nn.CrossEntropyLoss()  ##important: do not combine these two lines
-        loss = criterion(output_i, label_i)  ##important: do not combine these two lines
-        self.log("train_loss", loss)  # logging loss
-        return loss
-
-    def test_step(self, batch, batch_idx):
-        input_i, label_i = batch
-        output_i = self.forward(input_i)
-        criterion = nn.CrossEntropyLoss()
-        loss = criterion(output_i, label_i)
-        return loss
-
-
-# endregion
-
 # region train model
 # train_dataloader
-torch.manual_seed = 81
-model = L_identification()
-epochs = 300
 trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=10)
 # learning rate finder
 tuner = L.pytorch.tuner.Tuner(trainer)
@@ -132,7 +95,7 @@ torch.save(model.state_dict(), "model\l_id_iris.pt")
 
 # region Identify by model
 # load model and parameters
-loaded_model = L_identification()
+loaded_model = iden(in_feature=4, h1=8, h2=9, out_feature=3)
 loaded_model.load_state_dict(torch.load("model\l_id_iris.pt"))
 
 # identify
