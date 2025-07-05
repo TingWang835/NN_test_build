@@ -1,9 +1,9 @@
 Purpose of the repository:
 This repository is an exhibition of the machine learning models I have programed using popular datasets. Despite being a junior level self taught programmer, the models shown here did have readability, maintainability and scalability in mind when programmed, so that incase of need they can be quickly fitted on other datasets; or used by others thereof. Still I am aware that my programming skills are far from perfect, so please feel free to give me pointers :)
 
-Structure:
+Structure: <br/>
 MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf). <br/>
-data : raw data files (.csv) are stored. <br/>
+data: raw data files (.csv) are stored. <br/>
 model: codes of NN models. <br/>
 pyfile: original .py file for trained models <br/>
 trained_parameter: trained parameters of various models. <br/>
