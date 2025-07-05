@@ -9,8 +9,8 @@ MySQL: note from a mysql crush course and test_db script, model and diagram(.pdf
 
 Current trained models includes:
 
-    1. Iris_identification_lightning.py: Pytorch lightning nn for identification (using iris dataset (1988))
-    2. Boston_house_prediction_lightning.py: Pytorch lighting nn for prediction (using boston house dataset (1978))
+    1. Iris_identification_lightning.py: basic NN identification using iris dataset (1988), model: basicNN.py, Class L_NN_ID
+    2. Boston_house_prediction_lightning.py: basic NN prediction using boston house dataset (1978), model: basicNN.py, Class L_NN_Pred
     3. MNIST_VAE_lightning.py: Variational Autoencoder for MNIST binary dataset (1992), model: VAE.py, Class: L_VAE_BCE
 
 
