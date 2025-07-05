@@ -4,15 +4,15 @@ from torch.utils.data import TensorDataset, DataLoader
 from sklearn.model_selection import train_test_split
 import pandas as pd
 
-
 # my model
 from model.basicNN import L_NN_ID as iden
 
 # region model setting
 model = iden(in_feature=4, h1=8, h2=9, out_feature=3)
 torch.manual_seed = 81
-epochs = 500
+epochs = 300
 log_every_n_step = 10
+batch_size = 32
 # endregion
 
 # region dataset
@@ -40,7 +40,6 @@ train_input, test_input, train_label, test_label = train_test_split(
 train_dataset = TensorDataset(train_input, train_label)
 test_dataset = TensorDataset(test_input, test_label)
 # dataloader
-batch_size = 32  # train faster
 train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
 test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # endregion
@@ -48,7 +47,7 @@ test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 
 # region train model
 # train_dataloader
-trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=10)
+trainer = L.Trainer(max_epochs=epochs, log_every_n_steps=log_every_n_step)
 # learning rate finder
 tuner = L.pytorch.tuner.Tuner(trainer)
 lr_find_results = tuner.lr_find(
@@ -67,6 +66,10 @@ trainer.fit(model, train_dataloaders=train_loader)
 # evaluating train/loss result
 # use tensorboard in terminal
 # tensorboard --logdir=lightning_logs/
+
+# or the following for notebook
+# %reload_ext tensorboard
+# %tensorboard --logdir=lightning_logs/
 
 # endregion
 
@@ -87,8 +90,8 @@ with torch.no_grad():
     print(f"{correct} / {len(test_label)} are correct")
     print(f"accuracy = {correct / len(test_label)}")
 
-# saving model and parameters
-torch.save(model.state_dict(), "model\l_id_iris.pt")
+# saving parameters
+torch.save(model.state_dict(), "trained_parameters\l_id_iris.pt")
 
 # endregion
 
@@ -96,7 +99,7 @@ torch.save(model.state_dict(), "model\l_id_iris.pt")
 # region Identify by model
 # load model and parameters
 loaded_model = iden(in_feature=4, h1=8, h2=9, out_feature=3)
-loaded_model.load_state_dict(torch.load("model\l_id_iris.pt"))
+loaded_model.load_state_dict(torch.load("trained_parameters\l_id_iris.pt"))
 
 # identify
 with torch.no_grad():

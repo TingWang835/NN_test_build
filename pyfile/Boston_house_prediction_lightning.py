@@ -15,6 +15,7 @@ from model.basicNN import L_NN_Pred as pred
 model = pred(in_feature=13, h1=26, h2=27, h3=28, out_feature=1)
 torch.manual_seed = 81
 epochs = 500
+batch_size = 32
 log_every_n_step = 10
 # endregion
 
@@ -45,7 +46,6 @@ train_input, test_input, train_label, test_label = train_test_split(
 train_dataset = TensorDataset(train_input, train_label)
 test_dataset = TensorDataset(test_input, test_label)
 # dataloader
-batch_size = 32
 train_loader = DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
 test_loader = DataLoader(test_dataset, shuffle=False, batch_size=batch_size)
 # endregion
@@ -136,14 +136,14 @@ plt.tight_layout()
 plt.show()
 
 # saving model and parameters
-torch.save(model.state_dict(), "model\l_pd_BostonHousing.pt")
+torch.save(model.state_dict(), "trained_parameters\l_pd_BostonHousing.pt")
 # endregion
 
 
 # region Actual Prediction
 # load model and parameters
 loaded_model = pred(in_feature=13, h1=26, h2=27, h3=28, out_feature=1)
-loaded_model.load_state_dict(torch.load("model\l_pd_BostonHousing.pt"))
+loaded_model.load_state_dict(torch.load("trained_parameters\l_pd_BostonHousing.pt"))
 
 # load CSV dataset
 directory = "data\Boston\BostonHousing_100.csv"  # randomly selected 100 data to resemble real data
