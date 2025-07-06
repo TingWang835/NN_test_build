@@ -18,7 +18,7 @@ log_every_n_step = 10
 # end region
 
 
-# region convert to binary
+# region data convert to binary
 column_names = ["label"] + [f"pixel{i}" for i in range(784)]
 
 grey_train = pd.read_csv(
@@ -128,7 +128,7 @@ plt.scatter(
     s=20,
     marker=".",
     c=test_label,
-    cmap="Paired",
+    cmap="tab10",
 )
 plt.xlabel("t-SNE 1")
 plt.ylabel("t-SNE 2")
@@ -167,4 +167,55 @@ def generate_image(model, dataset, label):
     plt.show()
 
 
-generate_image(loaded_model, test_dataset, 0)
+for i in range(10):
+    generate_image(loaded_model, test_dataset, i)
+
+
+# generate imahe somewhere in between (fool around)
+
+
+def generate_image_mix(model, dataset, label_1, label_2):
+    images_1 = []
+    idx_1 = label_1
+    for x, y in dataset:
+        if y == idx_1:
+            images_1.append(x)
+
+    images_2 = []
+    idx_2 = label_2
+    for x, y in dataset:
+        if y == idx_2:
+            images_2.append(x)
+
+    encodeings_digit_1 = []
+    idx_1 = label_1
+    for idx_1 in range(10):
+        with torch.no_grad():
+            mu_1, sigma_1 = model.encoder(images_1[idx_1].view(1, 784))
+            encodeings_digit_1.append((mu_1, sigma_1))
+
+    encodeings_digit_2 = []
+    idx_2 = label_2
+    for idx_2 in range(10):
+        with torch.no_grad():
+            mu_2, sigma_2 = model.encoder(images_2[idx_2].view(1, 784))
+            encodeings_digit_2.append((mu_2, sigma_2))
+
+    mu_1, sigma_1 = encodeings_digit_1[label_1]
+    mu_2, sigma_2 = encodeings_digit_2[label_2]
+    mu = 0.5 * (mu_1 + mu_2)
+    sigma = 0.5 * (sigma_1 + sigma_2)
+    epsilon = torch.randn_like(sigma)
+    z = mu + sigma * epsilon
+    out = model.decoder(z)
+    out = torch.where(out > 0.2, 1, 0)  # convert sigmoid output into binary
+    out = out.view(1, 28, 28)  # generate image with 1 channel, 28 * 28 pixels
+    out_np = out.cpu().numpy()
+    out_np = np.transpose(out_np, (1, 2, 0))
+    plt.imshow(out_np, cmap="gray")
+    plt.axis("off")  # Hide axes
+    plt.show()
+
+
+generate_image_mix(loaded_model, test_dataset, 3, 7)
+# endregion
