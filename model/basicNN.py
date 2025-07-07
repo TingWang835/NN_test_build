@@ -51,12 +51,12 @@ class L_NN_ID(L.LightningModule):
 
 # region Class: NN_Pred, Module: lightning, opt:adam, loss Function: MSELoss
 class L_NN_Pred(L.LightningModule):
-    def __init__(self, in_feature=13, h1=26, h2=27, h3=28, out_feature=1):
+    def __init__(self, in_feature, h1, h2, h3, out_feature):
         super().__init__()
-        self.fc1 = nn.Linear(in_feature, h1, bias=True)
-        self.fc2 = nn.Linear(h1, h2, bias=True)
-        self.fc3 = nn.Linear(h2, h3, bias=True)
-        self.out = nn.Linear(h3, out_feature, bias=True)
+        self.fc1 = nn.Linear(in_feature, h1)
+        self.fc2 = nn.Linear(h1, h2)
+        self.fc3 = nn.Linear(h2, h3)
+        self.out = nn.Linear(h3, out_feature)
         self.learning_rate = 0.001
 
     def forward(self, input):
@@ -72,7 +72,7 @@ class L_NN_Pred(L.LightningModule):
     def training_step(self, batch, batch_idx):
         input_i, label_i = batch
         output_i = self.forward(input_i)
-        criterion = nn.MSELoss()  ##separate lines to be more adaptive
+        criterion = nn.MSELoss()
         loss = criterion(output_i, label_i)
         self.log("train_loss", loss)  # logging loss
         rsquare = r2_score(label_i, output_i)
