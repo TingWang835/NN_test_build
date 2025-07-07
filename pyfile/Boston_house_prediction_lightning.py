@@ -1,3 +1,4 @@
+# Packages
 import torch
 import lightning as L
 from torch.utils.data import TensorDataset, DataLoader
@@ -14,7 +15,7 @@ from model.basicNN import L_NN_Pred as pred
 # region model setting
 model = pred(in_feature=13, h1=26, h2=27, h3=28, out_feature=1)
 torch.manual_seed = 81
-epochs = 500
+epochs = 100
 batch_size = 32
 log_every_n_step = 10
 # endregion
@@ -35,7 +36,8 @@ y = df["medv"]
 # assigning inputs and labels and convert to tensor
 input = torch.FloatTensor(X.values)
 label = torch.FloatTensor(y.values)
-label = label.reshape(-1, 1)  # transform label to dim (n, 1) for loss calculation
+label = label.reshape(-1, 1)
+# transform label to dim (n, 1) for loss calculation
 # train test split
 train_input, test_input, train_label, test_label = train_test_split(
     input,
@@ -75,6 +77,7 @@ trainer.fit(model, train_dataloaders=train_loader)
 path_to_best_checkpoint = trainer.checkpoint_callback.best_model_path
 trainer = L.Trainer(max_epochs=800, log_every_n_steps=10)
 trainer.fit(model, train_dataloaders=train_loader, ckpt_path=path_to_best_checkpoint)
+
 
 # evaluating train/loss result
 # tensorboard --logdir=lightning_logs/
