@@ -24,6 +24,7 @@ log_every_n_step = 10
 # import and modify data with pandas
 directory = "data\Boston\BostonHousing.csv"  # can use url
 df = pd.read_csv(directory, delimiter=",")
+df = df.astype("float")
 print(df.head())
 
 # normalization with MinMaxscaler
@@ -37,6 +38,8 @@ y = df["medv"]
 input = torch.FloatTensor(X.values)
 label = torch.FloatTensor(y.values)
 label = label.reshape(-1, 1)
+
+print(y.head())
 # transform label to dim (n, 1) for loss calculation
 # train test split
 train_input, test_input, train_label, test_label = train_test_split(
@@ -151,18 +154,24 @@ loaded_model.load_state_dict(torch.load("trained_parameters\l_pd_BostonHousing.p
 # load CSV dataset
 directory = "data\Boston\BostonHousing_100.csv"  # randomly selected 100 data to resemble real data
 df_real = pd.read_csv(directory, delimiter=",")
-
+df_real = df_real.astype("float")
 # Normalize with training scaler
-df_real.iloc[:, np.r_[1:3, 5:13]] = scaler.transform(df_real.iloc[:, np.r_[1:3, 5:13]])
-print(df_real.head())
-real_input = torch.FloatTensor(df_real.values)  # convert to tensor
+df_real.iloc[:, np.r_[1:3, 5:14]] = scaler.transform(df_real.iloc[:, np.r_[1:3, 5:14]])
+# convert to tensor
+real_X = df_real.drop(["medv"], axis=1)
+real_input = torch.FloatTensor(real_X.values)  # convert to tensor
+# prediction
+pred_res = loaded_model.forward(real_input).clone().detach()
 
-pred_res = model.forward(real_input).clone().detach()
+# reverse scaler
 pred_medv = pd.DataFrame(pred_res.numpy())  # convert tensor to df
-df_real.insert(loc=14, column="pred_medv", value=pred_medv, allow_duplicates=False)
-df_real.iloc[:, np.r_[1:3, 5:14]] = scaler.inverse_transform(
-    df_real.iloc[:, np.r_[1:3, 5:14]]
+real_X.insert(loc=13, column="medv", value=pred_medv, allow_duplicates=False)
+price_pred = real_X.astype("float")
+price_pred.iloc[:, np.r_[1:3, 5:14]] = scaler.inverse_transform(
+    price_pred.iloc[:, np.r_[1:3, 5:14]]
 )
-print(df_real.head())
-df_real.to_csv("Price_prediction.csv", index=False)  # save prediction as new csv
+print(price_pred.head())
+
+# save prediction as new csv if necessary
+price_pred.to_csv("Price_prediction.csv", index=False)
 # endregion
