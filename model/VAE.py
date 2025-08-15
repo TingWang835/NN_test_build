@@ -3,6 +3,7 @@ import torch.nn as nn
 import lightning as L
 import torch.nn.functional as F
 from torch.optim import Adam
+from torchinfo import summary
 
 
 # region Class: L_VAE_1, Module: lightning, opt:adam, loss Function:BCEloss
@@ -56,12 +57,9 @@ class L_VAE_BCE(L.LightningModule):
 
 
 if __name__ == "__main__":
-    x = torch.randn(4, 28 * 28)
-    vae = L_VAE_BCE(input_dim=784, hidden_dim=200, latent_dim=20)
-    reconstruct, mu, sigma = vae(x)
-    print(reconstruct.shape)
-    print(mu.shape)
-    print(sigma.shape)
+    model = L_VAE_BCE(input_dim=784, hidden_dim=200, latent_dim=20)
+    summary(model, input_size=(32, 20, 784))
+    # input.shape = (batch_size, sequence_size, input_size)
 
 
 # endregion
