@@ -14,7 +14,7 @@ Current trained models includes:
     1. Iris_identification_lightning.ipynb: basic NN identification using iris dataset (1988), model: basicNN.py, Class L_NN_ID
     2. Boston_house_prediction_lightning.ipynb: basic NN prediction using boston house dataset (1978), model: basicNN.py, Class L_NN_Pred
     3. MNIST_VAE_lightning.ipynb: Variational Autoencoder for MNIST binary dataset (1992), model: VAE.py, Class: L_VAE_BCE
-    4. airpollusion_LSTM_lightning.ipynb: long short term memory for air pollution forcast dataset (between 2010 to 2014 Author unknown), model: LSTM.py, Class: L_LSTM_MSE
+    4. airpollution_LSTM_lightning.ipynb: long short term memory for air pollution forcast dataset (between 2010 to 2014 Author unknown), model: LSTM.py, Class: L_LSTM_MSE
 
 
 
