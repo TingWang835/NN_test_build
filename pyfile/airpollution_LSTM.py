@@ -164,12 +164,12 @@ plt.annotate(
 plt.tight_layout()
 plt.show()
 
-torch.save(model.state_dict(), "trained_parameters\l_LSTM_airpollusion.pt")
+torch.save(model.state_dict(), "trained_parameters\l_LSTM_airpollution.pt")
 # endregion
 
 # region prediction
 loaded_model = LSTM(input_size=14, hidden_size=20, num_layers=2, output_size=2)
-loaded_model.load_state_dict(torch.load("trained_parameters\l_LSTM_airpollusion.pt"))
+loaded_model.load_state_dict(torch.load("trained_parameters\l_LSTM_airpollution.pt"))
 
 print(prediction)
 X_real = prediction.drop(["pm2.5_label", "TEMP_label"], axis=1)
@@ -191,4 +191,4 @@ df_pred.iloc[:, np.r_[0:8, 9:14]] = scaler.inverse_transform(
 # inverse scaler
 print(df_pred)
 
-df_pred.to_csv("predicted_pollusion.csv", index=False)
+df_pred.to_csv("predicted_pollution.csv", index=False)
