@@ -16,7 +16,7 @@ class L_LSTM_MSE(L.LightningModule):
 
     def forward(self, x):
         lstm_out, _ = self.lstm(x)
-        output = self.fc(lstm_out)
+        output = self.fc(lstm_out[:, -1, :])
         return output
 
     def configure_optimizers(self):
@@ -41,7 +41,7 @@ class L_LSTM_MSE(L.LightningModule):
 
 if __name__ == "__main__":
     model = L_LSTM_MSE(input_size=14, hidden_size=20, num_layers=1, output_size=2)
-    summary(model, input_size=(32, 1000, 14))
+    summary(model, input_size=(32, 8, 14))
     # input.shape = (batch_size, time_steps, input_size)
 
 # endregion
